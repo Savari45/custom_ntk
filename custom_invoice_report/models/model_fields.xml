@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="field_pending_ids" model="ir.model.fields">
+        <field name="name">x_studio_pending_ids</field>
+        <field name="model">account.move</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="field_description">Outstanding payment</field>
+        <field name="ttype">many2many</field>
+        <field name="relation">account.move</field>
+        <field name="depends">amount_residual</field>
+        <field name="readonly" eval="True"/>
+        <field name="compute"><![CDATA[for record in self:
+    record['x_studio_pending_ids'] = False
+    outstanding_invoices = self.search([
+        ('partner_id', '=', record.partner_id.id),
+        ('move_type', '=', 'out_invoice'),
+        ('state', '=', 'posted'),
+        ('payment_state', '!=', 'paid')
+    ]).ids
+    record['x_studio_pending_ids'] = [(6,0,outstanding_invoices)]]]></field>
+    </record>
+    <record id="field_cheque_pending_ids" model="ir.model.fields">
+        <field name="name">x_studio_cheque_pending_ids</field>
+        <field name="model">account.move</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="field_description">Outstanding payment</field>
+        <field name="ttype">many2many</field>
+        <field name="relation">account.payment</field>
+        <field name="depends">amount_residual</field>
+        <field name="readonly" eval="True"/>
+        <field name="store" eval="True"/>
+        <field name="compute"><![CDATA[for record in self:
+    record['x_studio_cheque_pending_ids'] = False
+    outstanding_invoices = self.env['account.payment'].search([
+        ('partner_id', '=', record.partner_id.id),
+        ('payment_type', '=', 'inbound'),
+        ('is_matched', '=', False),
+        ('state', '=', 'in_process'),
+        ('move_id.journal_id.name', '=', 'Cheque')
+    ]).ids
+    record['x_studio_cheque_pending_ids'] = [(6,0,outstanding_invoices)]]]></field>
+    </record>
+</odoo>

@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="report_pos_invoice_document">
+        <t t-call="web.html_container">
+            <t t-call="web.internal_layout">
+
+                <div class="pos-paper">
+                    <!-- CSS for POS paper format -->
+                    <style>
+                        .pos-paper {
+                        width: 80mm;
+                        font-size: 12px;
+                        line-height: 1.2;
+                        }
+                        .pos-paper table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        }
+                        .pos-paper th, .pos-paper td {
+                        padding: 5px;
+                        text-align: left;
+                        border-bottom: 1px solid #ddd;
+                        }
+                        .pos-paper th {
+                        font-weight: bold;
+                        }
+                        .pos-paper .total-row {
+                        font-weight: bold;
+                        }
+                    </style>
+
+                    <!-- Company Info -->
+                    <t t-foreach="docs" t-as="doc">
+                        <div>
+                            <strong>
+                                <span t-field="doc.company_id.name"/>
+                            </strong>
+                            <br/>
+                            <span t-field="doc.company_id.street"/>
+                            <br/>
+                            <span t-field="doc.company_id.city"/>,
+                            <span t-field="doc.company_id.state_id.name"/>
+                            <br/>
+                            <span t-field="doc.company_id.zip"/>,
+                            <span t-field="doc.company_id.country_id.name"/>
+                            <br/>
+                            <t t-if="doc.company_id.vat">Tax ID:
+                                <span t-field="doc.company_id.vat"/>
+                            </t>
+                            <br/>
+                        </div>
+                        <br/>
+
+                        <!-- Invoice Info -->
+                        <div>
+                            <strong>Invoice</strong>
+                            <span t-field="doc.name"/>
+                            <br/>
+                            <strong>Invoice Date:</strong>
+                            <span t-field="doc.invoice_date"/>
+                            <br/>
+                            <strong>Due Date:</strong>
+                            <span t-field="doc.invoice_date_due"/>
+                            <br/>
+                        </div>
+                        <br/>
+
+                        <!-- Customer Info -->
+                        <div>
+                            <strong>Customer:</strong>
+                            <br/>
+                            <span t-field="doc.partner_id.name"/>
+                            <br/>
+                            <span t-field="doc.partner_id.street"/>
+                            <br/>
+                            <span t-field="doc.partner_id.city"/>,
+                            <span t-field="doc.partner_id.state_id.name"/>
+                            <br/>
+                            <span t-field="doc.partner_id.zip"/>,
+                            <span t-field="doc.partner_id.country_id.name"/>
+                            <br/>
+                            <t t-if="doc.partner_id.vat">Tax ID:
+                                <span t-field="doc.partner_id.vat"/>
+                            </t>
+                            <br/>
+                        </div>
+                        <br/>
+
+                        <!-- Invoice Lines -->
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th class="text-end">Qty</th>
+                                    <th class="text-end">Price</th>
+                                    <th class="text-end">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.invoice_line_ids" t-as="line">
+                                    <tr>
+                                        <td>
+                                            <span t-field="line.name"/>
+                                        </td>
+                                        <td class="text-end">
+                                            <span t-field="line.quantity"/>
+                                        </td>
+                                        <td class="text-end">
+                                            <span t-field="line.price_unit"
+                                                  t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                        </td>
+                                        <td class="text-end">
+                                            <span t-field="line.price_subtotal"
+                                                  t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <!-- Totals -->
+                        <div class="totals">
+                            <div>
+                                <strong>Untaxed Amount:</strong>
+                                <span t-field="doc.amount_untaxed"
+                                      t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                            </div>
+                            <div>
+                                <strong>Tax:</strong>
+                                <span t-field="doc.amount_tax"
+                                      t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                            </div>
+                            <div>
+                                <strong>Total:</strong>
+                                <span t-field="doc.amount_total"
+                                      t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                            </div>
+                        </div>
+                        <br/>
+
+                        <!-- Payment Info -->
+                        <div>
+                            <strong>Payment Communication:</strong>
+                            <span t-field="doc.payment_reference"/>
+                            <br/>
+                            <t t-if="doc.partner_bank_id">
+                                <strong>Bank Account:</strong>
+                                <span t-field="doc.partner_bank_id.acc_number"/>
+                            </t>
+                        </div>
+                        <br/>
+
+                        <!-- Outstanding Invoices -->
+                        <div>
+                            <h5>OUTSTANDING INVOICES</h5>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Ref</th>
+                                        <th>Date</th>
+                                        <th class="text-end">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="doc.x_studio_pending_ids" t-as="line">
+                                        <tr>
+                                            <td>
+                                                <span t-field="line.name"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="line.invoice_date"/>
+                                            </td>
+                                            <td class="text-end">
+                                                <span t-field="line.amount_residual_signed"
+                                                      t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <tr class="total-row">
+                                        <td colspan="2">TOTAL OUTSTANDING</td>
+                                        <td>
+                                            <span t-esc="sum(doc.x_studio_pending_ids.mapped('amount_residual_signed'))"
+                                                  t-options='{"widget": "monetary", "display_currency": doc.currency_id}'>
+                                                00
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <br/>
+
+                        <!-- PD Cheques -->
+                        <div>
+                            <h5>PD CHEQUES OUTSTANDING INVOICES</h5>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Ref</th>
+                                        <th>Date</th>
+                                        <th class="text-end">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="doc.x_studio_cheque_pending_ids" t-as="cheque">
+                                        <tr>
+                                            <td>
+                                                <span t-field="cheque.name"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="cheque.date"/>
+                                            </td>
+                                            <td class="text-end">
+                                                <span t-field="cheque.amount"
+                                                      t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <tr class="total-row">
+                                        <td colspan="2">TOTAL PD CHEQUES</td>
+                                        <td class="text-end">
+                                            <span t-esc="sum(doc.x_studio_cheque_pending_ids.mapped('amount'))"
+                                                  t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="text-center">
+                                            <b>PD CHEQUES AND OUTSTANDING INVOICES :</b>
+                                        </td>
+                                        <td>
+                                            <span t-esc="sum(doc.x_studio_pending_ids.mapped('amount_residual_signed')) + sum(doc.x_studio_cheque_pending_ids.mapped('amount'))"
+                                                  t-options='{"widget": "monetary", "display_currency": doc.currency_id}'>
+                                                00
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                            <br></br>
+                             <t t-if="doc.create_date">
+                                    <div>
+                                        <strong>Created On:</strong>
+                                        <span t-field="doc.create_date"/>
+                                    </div>
+                                </t>
+                                <t t-if="doc.create_uid">
+                                    <div>
+                                        <strong>Created By:</strong>
+                                        <span t-field="doc.create_uid.name"/>
+                                    </div>
+                                </t>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>  
+</odoo>
