@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_order_form_inherit" model="ir.ui.view">
+        <field name="name">sale.order.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='order_line']/list/field[@name='product_id']" position="attributes">
+                <attribute name="domain">[('qty_available', '>', 0)]</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/list/field[@name='product_template_id']" position="attributes">
+                <attribute name="domain">[('qty_available', '>', 0)]</attribute>
+            </xpath>
+        </field>
+    </record>
+     <record id="product_template_only_form_view_category" model="ir.ui.view">
+        <field name="name">product.template.product.form.category</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='categ_id']" position="after">
+
+                    <field name="a_percentage" string="A (%)"/>
+                    <field name="b_percentage" string="B (%)"/>
+                    <field name="c_percentage" string="C (%)"/>
+                    <field name="d_percentage" string="D (%)"/>
+                    <field name="margin_percentage" string="Margin (%)" readonly="1"/>
+                    <field name="sub_categ_id" string="Sub Category"/>
+
+            </xpath>
+        </field>
+    </record>
+</odoo>
