@@ -1,6 +1,6 @@
 from dateutil.relativedelta import relativedelta
 
-from odoo import api, fields, models
+from odoo import api, fields, models,api,Command
 from odoo.exceptions import UserError, ValidationError
 
 
@@ -113,27 +113,28 @@ class RoutePlanTemplate(models.Model):
     @api.onchange("route_ids")
     def _onchange_route_ids(self):
         for rec in self:
-            # Clear lines when no route/category is selected
-            if not rec.route_ids:
-                rec.line_ids = [(5, 0, 0)]
-                continue
 
-            # Find customers belonging to the selected categories
             partners = self.env["res.partner"].search([
                 ("category_id", "in", rec.route_ids.ids),
-                ("route_customer", "=", True),
-            ], order="name")
+            ])
 
-            # Rebuild template lines dynamically
-            rec.line_ids = [
-                (0, 0, {
-                    "sequence": sequence,
-                    "partner_id": partner.id,
-                    "description": False,
-                    "planned_minutes": 30,
-                })
-                for sequence, partner in enumerate(partners, start=10)
-            ]
+            commands = [Command.clear()]
+
+            for sequence, partner in enumerate(partners, ):
+                print("ADDING PARTNER:", partner.name)
+
+                commands.append(
+                    Command.create({
+                        "sequence": sequence,
+                        "partner_id": partner.id,
+                        "description": False,
+                        # "planned_minutes": 30,
+                    })
+                )
+
+            rec.line_ids = commands
+
+         
 
     def _next_date(self, value):
         self.ensure_one()
@@ -143,18 +144,7 @@ class RoutePlanTemplate(models.Model):
             return value + relativedelta(weeks=self.execute_every)
         return value + relativedelta(months=self.execute_every)
 
-    def action_plan(self):
-        self.ensure_one()
-        if not self.line_ids:
-            raise UserError("Add at least one customer to the route template.")
 
-        plan = self.env["routex.route.plan"].create_from_template(self)
-        today = fields.Date.context_today(self)
-        self.write({
-            "last_execution_date": today,
-            "next_execution_date": self._next_date(today),
-        })
-        return plan.action_open()
 
     @api.model
     def _cron_generate_due_templates(self):
