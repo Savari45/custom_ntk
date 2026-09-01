@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_routex" model="ir.ui.view">
+        <field name="name">res.partner.form.routex</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Route Management">
+                    <group>
+                        <field name="route_customer"/>
+                        <field name="route_salesperson_id"/>
+                        <field name="route_sales_team"/>
+                        <field name="route_visit_count" readonly="1"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_customers" model="ir.actions.act_window">
+        <field name="name">Customers</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('route_customer', '=', True)]</field>
+    </record>
+</odoo>

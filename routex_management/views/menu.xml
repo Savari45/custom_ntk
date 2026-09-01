@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_routex_root"
+              name="RouteX"
+              sequence="10"
+              groups="routex_management.group_route_user"/>
+
+    <!-- CUSTOMER -->
+    <menuitem id="menu_customer"
+              name="Customer"
+              parent="menu_routex_root"
+              sequence="10"/>
+
+    <menuitem id="menu_customers"
+              name="Customers"
+              parent="menu_customer"
+              action="action_customers"
+              sequence="10"/>
+
+    <!-- MANAGEMENT -->
+    <menuitem id="menu_management"
+              name="Management"
+              parent="menu_routex_root"
+              sequence="20"/>
+
+    <menuitem id="menu_route_plans"
+              name="Route Plans"
+              parent="menu_management"
+              action="action_plan"
+              sequence="10"/>
+
+    <!-- CONFIGURATION -->
+    <menuitem id="menu_configuration"
+              name="Configuration"
+              parent="menu_routex_root"
+              sequence="30"
+              groups="routex_management.group_route_manager"/>
+
+    <menuitem id="menu_settings"
+              name="Settings"
+              parent="menu_configuration"
+              action="action_routex_settings"
+              sequence="10"/>
+
+    <menuitem id="menu_route_templates"
+              name="Route Templates"
+              parent="menu_configuration"
+              action="action_template"
+              sequence="20"/>
+
+    <menuitem id="menu_visit_cancellation_reasons"
+              name="Visit Cancellation Reasons"
+              parent="menu_configuration"
+              action="action_visit_cancellation_reason"
+              sequence="30"/>
+
+</odoo>

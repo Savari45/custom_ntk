@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_route_plan" model="ir.actions.report">
+        <field name="name">Route Plan</field>
+        <field name="model">routex.route.plan</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">routex_management.report_route_plan_document</field>
+        <field name="report_file">routex_management.report_route_plan_document</field>
+        <field name="print_report_name">'Route - %s' % object.name</field>
+        <field name="binding_model_id" ref="model_routex_route_plan"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_route_plan_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2><span t-field="o.name"/></h2>
+                        <p>
+                            Sales Person: <span t-field="o.salesperson_id"/>
+                            | Date: <span t-field="o.scheduled_date"/>
+                            | Route: <span t-field="o.route_id"/>
+                        </p>
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th><th>Customer</th><th>State</th>
+                                    <th>Start</th><th>End</th><th>Total Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.line_ids" t-as="line">
+                                    <td><span t-field="line.sequence"/></td>
+                                    <td><span t-field="line.partner_id"/></td>
+                                    <td><span t-field="line.state"/></td>
+                                    <td><span t-field="line.start_on"/></td>
+                                    <td><span t-field="line.end_on"/></td>
+                                    <td><span t-field="line.total_time"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

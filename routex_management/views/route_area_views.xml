@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_route_area_list" model="ir.ui.view">
+        <field name="name">routex.route.area.list</field>
+        <field name="model">routex.route.area</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="route_count"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_route_area_form" model="ir.ui.view">
+        <field name="name">routex.route.area.form</field>
+        <field name="model">routex.route.area</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="sequence"/>
+                        <field name="active"/>
+                        <field name="company_id"/>
+                    </group>
+                    <notebook>
+                        <page string="Routes">
+                            <field name="route_ids" readonly="1">
+                                <list>
+                                    <field name="code"/>
+                                    <field name="name"/>
+                                    <field name="salesperson_id"/>
+                                    <field name="customer_count"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_route_area" model="ir.actions.act_window">
+        <field name="name">Route Areas</field>
+        <field name="res_model">routex.route.area</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

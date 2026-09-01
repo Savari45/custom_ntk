@@ -1,0 +1,19 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_area_user,area user,model_routex_route_area,routex_management.group_route_user,1,0,0,0
+access_area_manager,area manager,model_routex_route_area,routex_management.group_route_manager,1,1,1,1
+access_route_user,route user,model_routex_route,routex_management.group_route_user,1,0,0,0
+access_route_manager,route manager,model_routex_route,routex_management.group_route_manager,1,1,1,1
+access_route_line_user,route line user,model_routex_route_line,routex_management.group_route_user,1,0,0,0
+access_route_line_manager,route line manager,model_routex_route_line,routex_management.group_route_manager,1,1,1,1
+access_template_user,template user,model_routex_route_plan_template,routex_management.group_route_user,1,1,1,0
+access_template_manager,template manager,model_routex_route_plan_template,routex_management.group_route_manager,1,1,1,1
+access_template_line_user,template line user,model_routex_route_plan_template_line,routex_management.group_route_user,1,1,1,0
+access_template_line_manager,template line manager,model_routex_route_plan_template_line,routex_management.group_route_manager,1,1,1,1
+access_plan_user,plan user,model_routex_route_plan,routex_management.group_route_user,1,1,1,0
+access_plan_leader,plan leader,model_routex_route_plan,routex_management.group_route_team_leader,1,1,0,0
+access_plan_manager,plan manager,model_routex_route_plan,routex_management.group_route_manager,1,1,1,1
+access_plan_line_user,plan line user,model_routex_route_plan_line,routex_management.group_route_user,1,1,1,0
+access_plan_line_leader,plan line leader,model_routex_route_plan_line,routex_management.group_route_team_leader,1,1,0,0
+access_plan_line_manager,plan line manager,model_routex_route_plan_line,routex_management.group_route_manager,1,1,1,1
+access_cancellation_reason_user,cancellation reason user,model_routex_visit_cancellation_reason,routex_management.group_route_user,1,0,0,0
+access_cancellation_reason_manager,cancellation reason manager,model_routex_visit_cancellation_reason,routex_management.group_route_manager,1,1,1,1

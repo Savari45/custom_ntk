@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_routex" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.routex</field>
+        <field name="model">res.config.settings</field>
+        <field name="arch" type="xml">
+            <form string="RouteX Settings">
+                <app string="RouteX" name="routex_management">
+                    <block title="Route Planning">
+                        <setting string="Default Route Sales Person"
+                                 help="Default salesperson used for new route plans.">
+                            <field name="route_default_salesperson_id"/>
+                        </setting>
+                        <setting string="Default Route Team Leader"
+                                 help="Default team leader used for route approvals.">
+                            <field name="route_default_team_leader_id"/>
+                        </setting>
+                        <setting string="System Lock Time"
+                                 help="Time range during which route operations can be restricted by custom logic.">
+                            <div class="content-group">
+                                <div class="row">
+                                    <label for="route_system_lock_start"
+                                           string="Start Time"
+                                           class="col-lg-3 o_light_label"/>
+                                    <field name="route_system_lock_start"/>
+                                </div>
+                                <div class="row mt-2">
+                                    <label for="route_system_lock_end"
+                                           string="End Time"
+                                           class="col-lg-3 o_light_label"/>
+                                    <field name="route_system_lock_end"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                </app>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_routex_settings" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+    </record>
+</odoo>
